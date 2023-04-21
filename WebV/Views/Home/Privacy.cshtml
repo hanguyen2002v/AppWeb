@@ -1,6 +1,37 @@
-﻿@{
+﻿@model IEnumerable<WebV.Models.Book>;
+@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<form asp-controller="Home" asp-action="Privacy">
+    <p>
+        <input type="text" name="searchString" />
+        <input type="submit" value="Search" />
+    </p>
+</form>
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card" style="width: 18rem;">
+                    <img src="@item.Image" class="card-img-top" alt="..." width="50" height="250">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Title: @Html.DisplayFor(modelItem => item.Title)
+                        </h5>
+                        <p class="card-text">
+                            Price: @Html.DisplayFor(modelItem => item.Price)$
+                        </p>
+                        <p class="card-text">
+                            Qty: @Html.DisplayFor(modelItem => item.Quantity)
+                        </p>
+                        <a class="btn btn-secondary" asp-action="" asp-route-id="@item.BookId" role="button">Add to Cart</a>
+                        <a class="btn btn-success" asp-action="Detail" asp-controller="Home" asp-route-id="@item.BookId">Detail</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
