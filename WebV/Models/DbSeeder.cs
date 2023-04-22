@@ -2,6 +2,7 @@
 using WebV.Models;
 using WebV.Constants;
 using System;
+using System.Runtime.InteropServices;
 
 namespace WebV.Models
 {
@@ -14,6 +15,7 @@ namespace WebV.Models
             var roleManager = service.GetService<RoleManager<IdentityRole>>();
             await roleManager.CreateAsync(new IdentityRole(Roles.Admin.ToString()));
             await roleManager.CreateAsync(new IdentityRole(Roles.User.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(Roles.Staff.ToString()));
 
             // creating admin
 
@@ -30,6 +32,22 @@ namespace WebV.Models
             {
                 await userManager.CreateAsync(user, "Admin@123");
                 await userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+            }
+
+            // Create Staff
+            var userStaff = new ApplicationUser
+            {
+                UserName = "staff@gmail.com",
+                Email = "staff@gmail.com",
+                Name = "Hung",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true
+            };
+            var usesStaffInDb = await userManager.FindByEmailAsync(userStaff.Email);
+            if (usesStaffInDb == null)
+            {
+                await userManager.CreateAsync(userStaff, "Staff@123");
+                await userManager.AddToRoleAsync(userStaff, Roles.Staff.ToString());
             }
         }
     }
